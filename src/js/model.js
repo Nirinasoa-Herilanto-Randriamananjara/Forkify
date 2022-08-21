@@ -11,6 +11,7 @@ export const state = {
     resultsPerPage: RES_PER_PAGE,
   },
   bookmarks: [],
+  shop: [],
 };
 
 const createRecipeObject = function (recipe) {
@@ -18,7 +19,7 @@ const createRecipeObject = function (recipe) {
     cookingTime: recipe.cooking_time,
     id: recipe.id,
     title: recipe.title,
-    imageUrl: recipe.image_url,
+    image: recipe.image_url,
     ingredients: recipe.ingredients,
     publisher: recipe.publisher,
     servings: recipe.servings,
@@ -58,20 +59,19 @@ export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
 
-    // https://forkify-api.herokuapp.com/api/v2/recipes?search=pizza
     const { recipes } = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
 
     state.search.results = recipes?.map(recipe => {
       return {
         id: recipe.id,
         title: recipe.title,
-        imageUrl: recipe.image_url,
+        image: recipe.image_url,
         publisher: recipe.publisher,
         ...(recipe.key && { key: recipe.key }),
       };
     });
 
-    // reinitalise page state;
+    // reinitalize page state;
     state.search.page = 1;
   } catch (error) {
     throw error;
@@ -90,16 +90,12 @@ export const getSearchResultsPage = function (page = state.search.page) {
 };
 
 export const updateServings = function (newServing) {
-  // newQt = oldQt * newServing / oldServings
+  // Formula: newQt = oldQt * newServing / oldServings
   state.recipe.ingredients.forEach(ing => {
     ing.quantity = (ing.quantity * newServing) / state.recipe.servings;
   });
 
   state.recipe.servings = newServing;
-};
-
-const persistBookmark = function () {
-  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
 };
 
 export const addBookmark = function (recipe) {
@@ -130,7 +126,6 @@ export const uploadRecipe = async function (newRecipe) {
     const ingredients = Object.entries(newRecipe)
       .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
       .map(ing => {
-        // const ingArr = ing[1].replaceAll(' ', '').split(',');
         const ingArr = ing[1].split(',').map(ing => ing.trim());
 
         if (ingArr.length !== 3)
@@ -155,7 +150,6 @@ export const uploadRecipe = async function (newRecipe) {
 
     const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
 
-    console.log('Upload recipe', data);
     state.recipe = createRecipeObject(data.recipe);
 
     addBookmark(state.recipe);
