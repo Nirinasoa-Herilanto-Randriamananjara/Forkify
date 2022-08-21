@@ -12,10 +12,6 @@ import { MODAL_CLOSE_SEC } from './config.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-// const recipeContainer = document.querySelector('.recipe');
-
-// https://forkify-api.herokuapp.com/v2
-
 ///////////////////////////////////////
 
 // if (module.hot) {
@@ -93,7 +89,6 @@ const controlBookmarks = function () {
   if (!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
   else model.deleteBookmark(model.state.recipe.id);
 
-  console.log('bookmarked', model.state.recipe);
   // 2- updated recipe view
   recipeView.update(model.state.recipe);
 
@@ -114,8 +109,6 @@ const controlAddRecipe = async function (newRecipe) {
     // 1- upload new recipe
     await model.uploadRecipe(newRecipe);
 
-    // console.log(model.state.recipe);
-
     // 2- render newRecipe in view
     recipeView.render(model.state.recipe);
 
@@ -125,7 +118,7 @@ const controlAddRecipe = async function (newRecipe) {
     // render bookmark view
     bookmarksView.render(model.state.bookmarks);
 
-    // chande id in the url
+    // update "id" in the url
     window.history.pushState(null, '', `/#${model.state.recipe.id}`);
 
     // 4- close modal window
@@ -133,7 +126,6 @@ const controlAddRecipe = async function (newRecipe) {
       addRecipeView.toggleWindow();
     }, MODAL_CLOSE_SEC * 1000);
   } catch (error) {
-    console.error(error);
     addRecipeView.renderError(error.message);
   }
 };
