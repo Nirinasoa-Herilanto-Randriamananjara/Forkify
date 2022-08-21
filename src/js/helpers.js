@@ -32,39 +32,3 @@ export const AJAX = async function (url, uploadData = undefined) {
     throw error;
   }
 };
-
-// export const getJSON = async function (url) {
-//   try {
-//     const res = await Promise.race([fetch(url), timeout(TIMEOUT_SEC)]);
-//     const { data } = await res.json();
-
-//     if (!res.ok) throw new Error(`(${res.status}) ${data.message}`);
-
-//     return data;
-//   } catch (error) {
-//     // throwing error, when the promise is fullfield due to "return data;" statement
-//     throw error;
-//   }
-// };
-
-// export const sendJSON = async function (url, uploadData) {
-//   try {
-//     const postData = fetch(url, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(uploadData),
-//     });
-
-//     const res = await Promise.race([postData, timeout(TIMEOUT_SEC)]);
-
-//     const { data } = await res.json();
-
-//     if (!res.ok) throw new Error(`(${res.status}) ${data.message}`);
-
-//     return data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
