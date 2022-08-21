@@ -27,6 +27,14 @@ const createRecipeObject = function (recipe) {
   };
 };
 
+const persistBookmark = function () {
+  localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
+};
+
+const persistShoppingCart = function () {
+  localStorage.setItem('shoppings', JSON.stringify(state.shop));
+};
+
 export const loadRecipe = async function (id) {
   try {
     const data = await AJAX(`${API_URL}/${id}?key=${KEY}`);
