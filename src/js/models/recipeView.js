@@ -53,6 +53,13 @@ class RecipeView extends View {
     });
   }
 
+  /**
+   * Use to display Toast notification on the UI
+   */
+  showToastNotification() {
+    document.querySelector('.toast').classList.toggle('hidden');
+  }
+
   // we can do this here by using babel
   _generateMarkup() {
     return `
@@ -64,6 +71,15 @@ class RecipeView extends View {
           <span>${this._data.title}</span>
         </h1>
       </figure>
+
+      <div class="toast hidden">
+        <div>
+          <svg>
+            <use href="${icons}#icon-smile"></use>
+          </svg>
+        </div>
+        <p>Recipe '${this._data.title}' added to shop successfully :)</p>
+      </div>
 
       <div class="recipe__details">
         <div class="recipe__info">
