@@ -1,4 +1,4 @@
-import { API_URL, KEY, RES_PER_PAGE } from './config.js';
+import { API_URL, API_KEY, RES_PER_PAGE } from './config.js';
 
 import { AJAX } from './helpers.js';
 
@@ -38,7 +38,7 @@ const persistShoppingCart = function () {
 
 export const loadRecipe = async function (id) {
   try {
-    const data = await AJAX(`${API_URL}/${id}?key=${KEY}`);
+    const data = await AJAX(`${API_URL}/${id}?key=${API_KEY}`);
 
     const { recipe } = data;
 
@@ -59,7 +59,7 @@ export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
 
-    const { recipes } = await AJAX(`${API_URL}?search=${query}&key=${KEY}`);
+    const { recipes } = await AJAX(`${API_URL}?search=${query}&key=${API_KEY}`);
 
     state.search.results = recipes?.map(recipe => {
       return {
@@ -121,6 +121,20 @@ export const deleteBookmark = function (id) {
   persistBookmark();
 };
 
+export const addToShoppingCart = function (recipe) {
+  const items = state.shop.every(item => item.id !== recipe.id);
+  if (items) state.shop.push(recipe);
+
+  persistShoppingCart();
+};
+
+export const deleteShoppingItem = function (id) {
+  const item = state.shop.filter(recipe => recipe.id !== id);
+  state.shop = item;
+
+  persistShoppingCart();
+};
+
 export const uploadRecipe = async function (newRecipe) {
   try {
     const ingredients = Object.entries(newRecipe)
@@ -164,8 +178,16 @@ const init = function () {
   if (storage) state.bookmarks = JSON.parse(storage);
 };
 
-init();
+const initShopData = function () {
+  const items = localStorage.getItem('shoppings');
 
-const clearBookmarks = function () {
-  localStorage.clear('bookmarks');
+  if (items) state.shop = JSON.parse(items);
 };
+
+const clearData = function () {
+  localStorage.clear('bookmarks');
+  localStorage.clear('shoppings');
+};
+
+init();
+initShopData();
