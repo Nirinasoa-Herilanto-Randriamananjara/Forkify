@@ -212,3 +212,45 @@
     font-weight: 600;
   }
 }
+
+// toast notification
+.toast {
+  top: 6px;
+  left: 180px;
+  position: absolute;
+  max-width: 50rem;
+  margin: 0 auto;
+  padding: 2rem 4rem;
+  background: #fff;
+  z-index: 5;
+
+  display: flex;
+
+  svg {
+    height: 3rem;
+    width: 3rem;
+    fill: $color-primary;
+    transform: translateY(-0.3rem);
+  }
+
+  p {
+    margin-left: 1.5rem;
+    font-size: 1.8rem;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+}
+
+.delete__btn {
+  // position: absolute;
+  color: red;
+  font-size: 38px;
+  outline: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.shopitem {
+  width: 18rem;
+}
