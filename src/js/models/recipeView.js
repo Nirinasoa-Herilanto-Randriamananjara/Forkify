@@ -1,5 +1,4 @@
-// import icons from "../img/icons.svg"; // in parcel V1
-import icons from 'url:../../img/icons.svg'; // in parcel V2
+import icons from 'url:../../img/icons.svg';
 import fracty from 'fracty';
 
 import View from './View.js';
@@ -9,10 +8,16 @@ class RecipeView extends View {
   _errorMessage = 'We could not find that recipe. Please try another one!';
   _message = '';
 
+  /**
+   * Listen event when page is loaded
+   */
   addHandlerRender(handler) {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 
+  /**
+   * Listen event on update serving button
+   */
   addHandlerUpdateServings(handler) {
     this._parentElement.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn--update-servings');
@@ -24,6 +29,9 @@ class RecipeView extends View {
     });
   }
 
+  /**
+   * Listen event on bookmark button
+   */
   addHandlerAddBookmark(handler) {
     this._parentElement.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn--bookmark');
@@ -34,11 +42,22 @@ class RecipeView extends View {
     });
   }
 
+  addShoppingHandler(handler) {
+    // add recipe to shopping cart
+    this._parentElement.addEventListener('click', function (e) {
+      const addBtn = e.target.closest('.btn--shop');
+
+      if (!addBtn) return;
+
+      handler();
+    });
+  }
+
   // we can do this here by using babel
   _generateMarkup() {
     return `
       <figure class="recipe__fig">
-        <img src="${this._data.imageUrl}" alt="${
+        <img src="${this._data.image}" alt="${
       this._data.title
     }" class="recipe__img" />
         <h1 class="recipe__title">

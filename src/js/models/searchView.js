@@ -1,6 +1,10 @@
 class SearchView {
   _parentEl = document.querySelector('.search');
 
+  /**
+   * use to get a query terms from input search
+   * @returns query terms
+   */
   getQuery() {
     const query = this._parentEl.querySelector('.search__field').value;
     this._clearInput();

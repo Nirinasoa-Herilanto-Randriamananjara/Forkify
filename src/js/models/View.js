@@ -7,13 +7,13 @@ class View {
   /**
    * Render the received object to the DOM
    * @param {Object | Object[]} data the data to be rendered (ex: recipe)
-   * @param {boolean} [ render = true] If false, create a markup string instead of rendering to the DOM
+   * @param {boolean} [ display = true] If false, create a markup string instead of rendering to the DOM
    * @returns {undefined | string} A markup string is returned if render is false
    * @this {Object} View instance
    * @author Nirinasoa Herilanto
-   * @todo finish implementation
+   * @todo implementation finished
    */
-  render(data, render = true) {
+  render(data, display = true) {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
 
@@ -21,13 +21,16 @@ class View {
 
     const markup = this._generateMarkup();
 
-    if (!render) return markup;
+    // avoid re-render of markup
+    if (!display) return markup;
 
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
-  // use to avoid flickering image, ... in view
+  /**
+   * Use to avoid flickering image, etc... in view
+   */
   update(data) {
     this._data = data;
 
@@ -42,7 +45,7 @@ class View {
     newElements.forEach((newEl, i) => {
       const curEl = curElements[i];
 
-      // update changed text
+      // * update changed text
       if (
         !newEl.isEqualNode(curEl) &&
         newEl.firstChild?.nodeValue.trim() !== ''
@@ -50,7 +53,7 @@ class View {
         curEl.textContent = newEl.textContent;
       }
 
-      // update changed attributes,
+      // * update changed attributes,
       // replace all attributes from curEl by the attributes coming from the newEl
       if (!newEl.isEqualNode(curEl)) {
         Array.from(newEl.attributes).forEach(attr => {
