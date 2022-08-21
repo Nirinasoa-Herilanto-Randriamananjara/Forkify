@@ -5,8 +5,9 @@ import resultsView from './models/resultsView.js';
 import paginationView from './models/paginationView.js';
 import bookmarksView from './models/bookmarksView.js';
 import addRecipeView from './models/addRecipeView.js';
+import shoppingView from './models/shoppingView.js';
 
-import { MODAL_CLOSE_SEC } from './config.js';
+import { MODAL_CLOSE_SEC, CLOSE_TOAST_SEC } from './config.js';
 
 // make the application available for all browsers
 import 'core-js/stable';
@@ -29,7 +30,10 @@ const controlRecipes = async function () {
     resultsView.update(model.getSearchResultsPage());
 
     // 1- update bookmark view
-    bookmarksView.update(model.state.bookmarks); // see later
+    bookmarksView.render(model.state.bookmarks);
+
+    // update shopping view
+    shoppingView.render(model.state.shop);
 
     // (2)- loading spinner
     recipeView.renderSpinner();
@@ -130,6 +134,29 @@ const controlAddRecipe = async function (newRecipe) {
   }
 };
 
+const loadShoppingView = function () {
+  shoppingView.render(model.state.shop);
+};
+
+const controlShopping = function () {
+  model.addToShoppingCart(model.state.recipe);
+
+  // Show toast notification on the UI
+  recipeView.showToastNotification();
+
+  shoppingView.render(model.state.shop);
+
+  // Hide toast notification after many secondes
+  setTimeout(function () {
+    recipeView.showToastNotification();
+  }, CLOSE_TOAST_SEC * 1000);
+};
+
+const controlDeleteRecipe = function (id) {
+  model.deleteShoppingItem(id);
+  shoppingView.render(model.state.shop);
+};
+
 // handling event handler from the view (Subscriber)
 // -- the init function, is in control
 const init = function () {
@@ -137,18 +164,15 @@ const init = function () {
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlBookmarks);
+
+  shoppingView.addHandlerRender(loadShoppingView);
+  recipeView.addShoppingHandler(controlShopping);
+
+  shoppingView.addHandlerDeleteRecipe(controlDeleteRecipe);
+
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
   addRecipeView.addHandlerSubmit(controlAddRecipe);
 };
 
 init();
-
-//////////////////////////////////////////////////////////////////////////////////
-
-// -- the init function has no control, just execute the function inside the input
-// const init = function (handler) {
-//   return recipeView.addHandlerRender(handler);
-// };
-
-// init(controlRecipes);
