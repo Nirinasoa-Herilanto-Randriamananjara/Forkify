@@ -4,7 +4,7 @@ import { API_KEY } from '../config.js';
 
 class ShoppingView extends View {
   _parentElement = document.querySelector('.shopping__list');
-  _errorMessage = 'Empty cart. Find a nice recipe and shopped it :)';
+  _errorMessage = 'Empty cart. Find a nice recipe and add it :)';
   _message = '';
 
   addHandlerRender(handler) {
