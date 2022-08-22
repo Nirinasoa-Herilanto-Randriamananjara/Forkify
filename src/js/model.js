@@ -28,14 +28,24 @@ const createRecipeObject = function (recipe) {
   };
 };
 
+/**
+ * Bookmark store (data stored on localStorage)
+ */
 const persistBookmark = function () {
   localStorage.setItem('bookmarks', JSON.stringify(state.bookmarks));
 };
 
+/**
+ * Shopping store (data stored on localStorage)
+ */
 const persistShoppingCart = function () {
   localStorage.setItem('shoppings', JSON.stringify(state.shop));
 };
 
+/**
+ * Load recipe by id
+ * @param {number} id recipe id
+ */
 export const loadRecipe = async function (id) {
   try {
     const data = await AJAX(`${API_URL}/${id}?key=${API_KEY}`);
@@ -55,6 +65,10 @@ export const loadRecipe = async function (id) {
   }
 };
 
+/**
+ * Use to search recipe
+ * @param {string} query recipe terms
+ */
 export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
@@ -89,6 +103,10 @@ export const getSearchResultsPage = function (page = state.search.page) {
   return state.search.results.slice(start, end);
 };
 
+/**
+ * Use to update serving
+ * @param {number} newServing number of serving (person)
+ */
 export const updateServings = function (newServing) {
   // Formula: newQt = oldQt * newServing / oldServings
   state.recipe.ingredients.forEach(ing => {
@@ -121,6 +139,10 @@ export const deleteBookmark = function (id) {
   persistBookmark();
 };
 
+/**
+ * Use to add recipe data to shop
+ * @param {Object} recipe recipe data
+ */
 export const addToShoppingCart = function (recipe) {
   const items = state.shop.every(item => item.id !== recipe.id);
   if (items) state.shop.push(recipe);
@@ -128,6 +150,10 @@ export const addToShoppingCart = function (recipe) {
   persistShoppingCart();
 };
 
+/**
+ * Use to delete recipe on shopping list
+ * @param {number} id recipe id
+ */
 export const deleteShoppingItem = function (id) {
   const item = state.shop.filter(recipe => recipe.id !== id);
   state.shop = item;
@@ -135,6 +161,10 @@ export const deleteShoppingItem = function (id) {
   persistShoppingCart();
 };
 
+/**
+ * Upload new recipe
+ * @param {Object} newRecipe recipe data
+ */
 export const uploadRecipe = async function (newRecipe) {
   try {
     const ingredients = Object.entries(newRecipe)
