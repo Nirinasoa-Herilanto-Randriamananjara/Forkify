@@ -4,7 +4,7 @@
   "description": "Recipe application",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html --dist-dir ./dist"
   },
   "author": "Nirinasoa Herilanto",
   "license": "ISC",
@@ -13,18 +13,7 @@
     "@types/core-js": "^2.5.5",
     "parcel": "^2.6.2"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {
     "core-js": "^3.23.2",
     "fracty": "^1.0.11",
